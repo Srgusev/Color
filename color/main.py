@@ -1,18 +1,11 @@
-import base64
-from io import BytesIO
-import streamlit as st
-from PIL import Image
 import tensorflow as tf
 import streamlit as st
+from tensorflow.python.keras.preprocessing import image as kp_image
 from tensorflow.python.keras import models
+
 from PIL import Image
 import numpy as np
 import time
-import base64
-from io import BytesIO
-import streamlit as st
-from PIL import Image
-
 
 
 
@@ -26,7 +19,7 @@ def get_image_download_link(img):
 
 def main():
     st.set_page_config(layout="centered")
-    st.title('Нейронное раскрашивание изображения')
+    st.title('Нейронный перенос стиля')
     # st.text(tf.executing_eagerly())
     menu = ["Домашняя страница", "О сервисе"]
     choice = st.sidebar.selectbox("Меню", menu)
