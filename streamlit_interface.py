@@ -283,11 +283,11 @@ def main():
         if style_transfer_button:
             if content_image is not None and style_image is not None:
                 best, best_loss = style.run_style_transfer(content_image, style_image, number_of_iterations)
-                col10, col11, col12 = st.beta_columns((1, 4, 1))
+                col10, col11, col12 = st.columns((1, 4, 1))
                 with col11:
                     if best.any():
                         col11.image(Image.fromarray(best), use_column_width=True)
-                col13, col14, col15 = st.beta_columns((4, 1, 4))
+                col13, col14, col15 = st.columns((4, 1, 4))
                 with col14:
                     if best.any():
                         st.markdown(get_image_download_link(Image.fromarray(best)), unsafe_allow_html=True)
