@@ -202,7 +202,7 @@ def run_style_transfer(content_img,
     estimated = st.empty()
     latest_iteration = st.empty()
     bar = st.progress(0.0)
-    col1, col2, col3 = st.beta_columns((1, 2.5, 1))
+    col1, col2, col3 = st.columns((1, 2.5, 1))
     with col2:
         cur_image = st.empty()
 
