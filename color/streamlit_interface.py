@@ -2,7 +2,7 @@ import base64
 from io import BytesIO
 import streamlit as st
 from PIL import Image
-import style_transfer as style
+import color as color
 
 
 def get_image_download_link(img):
