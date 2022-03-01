@@ -4,7 +4,6 @@ from io import BytesIO
 from keras.engine.input_layer import InputLayer
 from keras.layers import Conv2D,UpSampling2D
 from keras.models import Sequential
-from matplotlib import style
 import tensorflow as tf
 import streamlit as st
 from tensorflow.python.keras.preprocessing import image as kp_image
