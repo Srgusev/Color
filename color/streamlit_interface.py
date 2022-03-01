@@ -1,11 +1,6 @@
 import base64
 from io import BytesIO
 
-import img as img
-import streamlit as st
-from PIL import Image
-import tensorflow as tf
-import streamlit as st
 from keras.engine.input_layer import InputLayer
 from keras.layers import Conv2D,UpSampling2D
 from keras.models import Sequential
@@ -20,7 +15,6 @@ import time
 import base64
 from io import BytesIO
 import streamlit as st
-from PIL import Image
 
 
 # Подготовка данных
