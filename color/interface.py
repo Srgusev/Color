@@ -3,6 +3,7 @@ from io import BytesIO
 import streamlit as st
 from PIL import Image
 
+
 def get_image_download_link(img):
     buffered = BytesIO()
     img.save(buffered, format="JPEG")
@@ -10,18 +11,17 @@ def get_image_download_link(img):
     href = f'<a href="data:file/jpg;base64,{img_str}" download="result.jpg">Скачать результат</a>'
     return href
 
-def html_links(text, link):
-    return f'''<a href="{link}" target="_blank">{text}</a>'''
-
-
-
-
-st.sidebar.title("Информация")
-img_width = '60px'
-
 
 def main():
-    st.title('Нейронный перенос стиля' )
+    st.markdown('''<p style="font-size: 80px;
+                    background: -webkit-linear-gradient(#FFA500, #FF4500);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    font-family: verdana;
+                    font-weight: bold;
+                    font-size:42px">
+                    Раскрашивание черно-белого изображения
+                    </p>''',unsafe_allow_html=True)
     # st.text(tf.executing_eagerly())
     menu = ["Домашняя страница", "О сервисе"]
     choice = st.sidebar.selectbox("Меню", menu)
@@ -81,6 +81,29 @@ def main():
         st.text("Гусевым Сергеем")
         st.text("МГТУ им. Н.Э. Баумана, 2022")
 
-
 if __name__ == '__main__':
     main()
+
+
+def small_title(x):
+    text = f'''<p style="background: -webkit-linear-gradient(#FF4500, #FFA500);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        font-family: verdana;
+                        font-weight: bold;
+                        font-size:24px">
+                        {x}
+                        </p>'''
+    return text
+
+
+text = f'''{small_title('Общая информация')}
+<p>
+Этот webapp использует AI для окрашивания черно-белых изображений.
+Пользователи могут отправить черно-белое изображение
+в виде файла или вставить ссылку на URL-адрес.
+Архитектура CNN, использованная в этом проекте,вдохновлена работами Ричарда Чжана, Филлипа Изолы, Алексея А. Эфроса </p >
+<div>
+</div>
+'''
+st.sidebar.markdown(text, unsafe_allow_html=True)
