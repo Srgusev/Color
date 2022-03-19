@@ -1,5 +1,4 @@
 import base64
-import self as self
 import streamlit as st
 from io import BytesIO
 import os
