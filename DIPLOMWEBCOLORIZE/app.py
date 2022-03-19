@@ -1,4 +1,7 @@
+import base64
+import self as self
 import streamlit as st
+from io import BytesIO
 import os
 import sys
 import numpy as np
@@ -10,6 +13,8 @@ import streamlit.components.v1 as components
 import colorizers
 colorizer_eccv16 = colorizers.eccv16().eval()
 colorizer_siggraph17 = colorizers.siggraph17().eval()
+sys.path.append('/DIPLOMWEBCOLORIZE/button.html')
+
 
 def process_image(img):
     (tens_l_orig, tens_l_rs) = preprocess_img(img, HW=(256,256))
@@ -30,7 +35,29 @@ def fix_channels(img):
         return img
 
 
-st.set_page_config(page_title='Колоризация')
+
+
+
+def WB_image_download_link(img):
+	"""Generates a link allowing the PIL image to be downloaded
+	in:  PIL image
+	out: href string
+	"""
+	buffered = BytesIO()
+	img.save(buffered, format="JPEG")
+	img_str = base64.b64encode(buffered.getvalue()).decode()
+	href = f'<a href="data:file/jpg;base64,{img_str}" download ="Черно-белое.jpg"><button> <img src="button.png">Скачать исходное изображение</button></a>'
+	return href
+
+st.set_page_config(page_title='Раскрашивание ЧБ')
+
+
+def COL_image_download_link(out_img):
+	buffered = BytesIO()
+	out_img.save(buffered, format="JPEG")
+	img_str = base64.b64encode(buffered.getvalue()).decode()
+	href = f'<a href="data:file/jpg;base64,{img_str}" download ="Цвет.jpg"><button>Скачать цветное изображение</button></a>'
+	return href
 
 def small_title(x):
     text = f'''<p style="background: -webkit-linear-gradient(#FF4500, #FFA500);
@@ -74,6 +101,7 @@ st.markdown('''<p style="font-size: 80px;
                 Раскрашивание фотографий.
                 </p>''', unsafe_allow_html=True)
 
+
 st.subheader('Пожалуйста загрузите изображение')
 
 with st.form(key='uploader'):
@@ -110,9 +138,6 @@ elif url and submit_button_upl:
         if st.image is not None:
             col2.image(st.image,use_column_width=True)
 
-
-
-
 elif uploaded_file and submit_button_upl:
     img = Image.open(uploaded_file)
     img = np.array(img)
@@ -124,13 +149,23 @@ elif uploaded_file and submit_button_upl:
     with col1:
         st.header("Черно-белое изображение")
         st.image = (img)
+        #img=Image.fromarray(img)
+        #img.save("file.jpeg")
+        img = Image.fromarray(img)
 
         if st.image is not None:
             col1.image(st.image,use_column_width=True)
+        st.markdown(WB_image_download_link(img),unsafe_allow_html=True)
 
     with col2:
         st.header("Цветное изображение")
         st.image = (out_img)
+        #out_img.save("file_color.jpeg")
+        #img = out_img
+        #out_img = Image.fromarray((out_img * 255).astype(np.uint8))
+        #out_img = Image.fromarray(out_img)
+        out_img = Image.fromarray((out_img).astype(np.uint8))
 
         if st.image is not None:
             col2.image(st.image,use_column_width=True)
+        st.markdown(COL_image_download_link(out_img),unsafe_allow_html=True)
