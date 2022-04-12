@@ -1,4 +1,7 @@
 # Color
+
+[![Открыть приложение Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/srgusev/color/main/DIPLOMWEBCOLORIZE/app.py/)
+
 ### Для чего нужно:   
       Раскрашивание с помощью нейронных сетей черно-белого снимка.      
 ### Задачи:   
