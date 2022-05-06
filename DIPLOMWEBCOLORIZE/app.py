@@ -46,119 +46,137 @@ def COL_image_download_link(out_img):
 	return href
     # out_img.save(buffered, format="JPEG")
 
+menu = ["Раскрашивание фотографий","О сервисе"]
+choice = st.sidebar.selectbox("Меню",menu)
 
-st.set_page_config(page_title='Раскрашивание ЧБ')
+if choice == "Раскрашивание фотографий":
 
-def small_title(x):
-    text = f'''<p style="background: -webkit-linear-gradient(#FF4500, #FFA500);
+    def small_title(x):
+        text = f'''<p style="background: -webkit-linear-gradient(#FF4500, #FFA500);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            font-family: verdana;
+                            font-weight: bold;
+                            font-size:24px">
+                            {x}
+                            </p>'''
+        return text
+
+    def html_links(text, link):
+        return f'''<a href="{link}" target="_blank">{text}</a>'''
+
+    style = '''font_size: 14px;
+               color: #aaa;'''
+
+    st.sidebar.title("Информация")
+    img_width = '60px'
+
+    text = f'''{small_title('Приложение')}
+    <p style="{style}">Этот webapp использует AI для окрашивания черно-белых изображений.
+    Пользователи могут отправить черно-белое изображение в виде файла или вставить ссылку на URL-адрес (убедитесь, что URL-адрес заканчивается расширением файла изображения). </p >
+    {small_title ('Ссылки')}
+    <p style="{style}">Архитектура CNN, использованная в этом проекте, вдохновлена работами Ричарда Чжана, Филлипа Изолы, Алексея А. Эфроса.
+    Подробнее о проекте можете прочитать по ссылке: <a href="http://iizuka.cs.tsukuba.ac.jp/projects/colorization/data/colorization_sig2016.pdf"> ЗДЕСЬ </a>
+    </p>
+    <div>
+    </div>
+    '''
+    st.sidebar.markdown(text, unsafe_allow_html=True)
+
+    st.markdown('''<p style="font-size: 80px;
+                    background: -webkit-linear-gradient(#FFA500, #FF4500);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    font-family: verdana;
+                    font-weight: bold;
+                    font-size:32px">
+                    Раскрашивание фотографий.
+                    </p>''', unsafe_allow_html=True)
+
+
+    st.subheader('Пожалуйста загрузите изображение')
+
+    with st.form(key='uploader'):
+        uploaded_file = st.file_uploader("Выберите файл...")
+        url = st.text_input('Вставьте ссылку на изображение')
+        submit_button_upl = st.form_submit_button(label='Раскрасить')
+
+    if (uploaded_file and url and submit_button_upl):
+        st.error('Ошибка: Загрузите изображение одним способом!')
+
+
+    elif url and submit_button_upl:
+        img = Image.open(requests.get(url, stream=True).raw)
+        img = np.array(img)
+        img = fix_channels(img)
+
+        with st.spinner(f'Раскраска изображения, подождите...'):
+            out_img = process_image(img)
+            st.balloons()
+        col1,col2 = st.columns(2)
+
+        with col1:
+            st.header("Черно-белое изображение")
+            st.image = (img)
+            img = Image.fromarray(img)
+
+            if st.image is not None:
+                col1.image(st.image,use_column_width=True)
+                st.markdown(WB_image_download_link(img),unsafe_allow_html=True)
+
+        with col2:
+            st.header("Цветное изображение")
+            st.image = (out_img)
+            #out_img = Image.fromarray((out_img).astype(np.uint8))
+            #out_img = Image.fromarray(npimg.astype('uint8'))
+
+            if st.image is not None:
+                col2.image(st.image,use_column_width=True)
+                st.markdown(COL_image_download_link(out_img),unsafe_allow_html=True)
+
+    elif uploaded_file and submit_button_upl:
+        img = Image.open(uploaded_file)
+        img = np.array(img)
+        img = fix_channels(img)
+        with st.spinner(f'Раскраска изображения, подождите...'):
+            out_img = process_image(img)
+        col1,col2 = st.columns(2)
+
+        with col1:
+            st.header("Черно-белое изображение")
+            st.image = (img)
+            img = Image.fromarray(img)
+
+            if st.image is not None:
+                col1.image(st.image,use_column_width=True)
+            st.markdown(WB_image_download_link(img),unsafe_allow_html=True)
+
+        with col2:
+            st.header("Цветное изображение")
+            st.image = (out_img)
+            #out_img = Image.fromarray(out_img.astype(np.uint8))
+            #np.save('new.jpg', out_img)
+            #matplotlib.image.imsave('newfile.jpeg', out_img)
+
+            if st.image is not None:
+                col2.image(st.image,use_column_width=True)
+            st.markdown(COL_image_download_link(out_img),unsafe_allow_html=True)
+
+if choice == "О сервисе":
+    st.markdown('''<p style="font-size: 80px;
+                        background: -webkit-linear-gradient(#FFA500, #FF4500);
                         -webkit-background-clip: text;
                         -webkit-text-fill-color: transparent;
                         font-family: verdana;
                         font-weight: bold;
-                        font-size:24px">
-                        {x}
-                        </p>'''
-    return text
+                        font-size:32px">
+                        О сервисе
+                        </p>''',unsafe_allow_html=True)
+    #st.header("Морской закат")
+    #img = Image.open('Sunset.jpeg')
+    #st.image(img, caption= 'Sunrise by the mountains')
 
-def html_links(text, link):
-    return f'''<a href="{link}" target="_blank">{text}</a>'''
-
-style = '''font_size: 14px;
-           color: #aaa;'''
-
-st.sidebar.title("Информация")
-img_width = '60px'
-
-text = f'''{small_title('Приложение')}
-<p style="{style}">Этот webapp использует AI для окрашивания черно-белых изображений.
-Пользователи могут отправить черно-белое изображение в виде файла или вставить ссылку на URL-адрес (убедитесь, что URL-адрес заканчивается расширением файла изображения). </p >
-{small_title ('Ссылки')}
-<p style="{style}">Архитектура CNN, использованная в этом проекте, вдохновлена работами Ричарда Чжана, Филлипа Изолы, Алексея А. Эфроса.
-Подробнее о проекте можете прочитать по ссылке: <a href="http://iizuka.cs.tsukuba.ac.jp/projects/colorization/data/colorization_sig2016.pdf"> ЗДЕСЬ </a>
-</p>
-<div>
-</div>
-'''
-st.sidebar.markdown(text, unsafe_allow_html=True)
-
-st.markdown('''<p style="font-size: 80px;
-                background: -webkit-linear-gradient(#FFA500, #FF4500);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                font-family: verdana;
-                font-weight: bold;
-                font-size:32px">
-                Раскрашивание фотографий.
-                </p>''', unsafe_allow_html=True)
-
-
-st.subheader('Пожалуйста загрузите изображение')
-
-with st.form(key='uploader'):
-    uploaded_file = st.file_uploader("Выберите файл...")
-    url = st.text_input('Вставьте ссылку на изображение')
-    submit_button_upl = st.form_submit_button(label='Раскрасить')
-
-if (uploaded_file and url and submit_button_upl):
-    st.error('Ошибка: Загрузите изображение одним способом!')
-
-elif (uploaded_file and url and submit_button_upl):
-    st.error("Ошибка: Загрузите изображение одним способом!")
-
-elif url and submit_button_upl:
-    img = Image.open(requests.get(url, stream=True).raw)
-    img = np.array(img)
-    img = fix_channels(img)
-
-    with st.spinner(f'Раскраска изображения, подождите...'):
-        out_img = process_image(img)
-        st.balloons()
-    col1,col2 = st.columns(2)
-
-    with col1:
-        st.header("Черно-белое изображение")
-        st.image = (img)
-        img = Image.fromarray(img)
-
-        if st.image is not None:
-            col1.image(st.image,use_column_width=True)
-            st.markdown(WB_image_download_link(img),unsafe_allow_html=True)
-
-    with col2:
-        st.header("Цветное изображение")
-        st.image = (out_img)
-        out_img = Image.fromarray((out_img).astype(np.uint8))
-
-        #out_img = Image.fromarray(npimg.astype('uint8'))
-
-        if st.image is not None:
-            col2.image(st.image,use_column_width=True)
-            st.markdown(COL_image_download_link(out_img),unsafe_allow_html=True)
-
-elif uploaded_file and submit_button_upl:
-    img = Image.open(uploaded_file)
-    img = np.array(img)
-    img = fix_channels(img)
-    with st.spinner(f'Раскраска изображения, подождите...'):
-        out_img = process_image(img)
-    col1,col2 = st.columns(2)
-
-    with col1:
-        st.header("Черно-белое изображение")
-        st.image = (img)
-        img = Image.fromarray(img)
-
-        if st.image is not None:
-            col1.image(st.image,use_column_width=True)
-        st.markdown(WB_image_download_link(img),unsafe_allow_html=True)
-
-    with col2:
-        st.header("Цветное изображение")
-        st.image = (out_img)
-        #out_img = Image.fromarray(out_img.astype(np.uint8))
-        #np.save('new.jpg', out_img)
-        #matplotlib.image.imsave('newfile.jpeg', out_img)
-
-        if st.image is not None:
-            col2.image(st.image,use_column_width=True)
-        st.markdown(COL_image_download_link(out_img),unsafe_allow_html=True)
+    st.text("Сервис по раскрашиванию черно-белых изображений с помощью ансамбля нейронных сетей")
+    st.text("Вы можете с помощью данного приложения придать цвет своим черно-белым фотографиям")
+    st.text("Сервис разработан Гусевым Сергеем")
+    st.text("МГТУ им. Н.Э. Баумана, 2022")
