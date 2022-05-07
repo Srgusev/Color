@@ -163,6 +163,38 @@ if choice == "Раскрашивание фотографий":
             st.markdown(COL_image_download_link(out_img),unsafe_allow_html=True)
 
 if choice == "О сервисе":
+    def small_title(x):
+        text = f'''<p style="background: -webkit-linear-gradient(#FF4500, #FFA500);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            font-family: verdana;
+                            font-weight: bold;
+                            font-size:24px">
+                            {x}
+                            </p>'''
+        return text
+
+    def html_links(text, link):
+        return f'''<a href="{link}" target="_blank">{text}</a>'''
+
+    style = '''font_size: 14px;
+               color: #aaa;'''
+
+    st.sidebar.title("Информация")
+    img_width = '60px'
+
+    text = f'''{small_title('Приложение')}
+    <p style="{style}">Этот webapp использует AI для окрашивания черно-белых изображений.
+    Пользователи могут отправить черно-белое изображение в виде файла или вставить ссылку на URL-адрес (убедитесь, что URL-адрес заканчивается расширением файла изображения). </p >
+    {small_title ('Ссылки')}
+    <p style="{style}">Архитектура CNN, использованная в этом проекте, вдохновлена работами Ричарда Чжана, Филлипа Изолы, Алексея А. Эфроса.
+    Подробнее о проекте можете прочитать по ссылке: <a href="http://iizuka.cs.tsukuba.ac.jp/projects/colorization/data/colorization_sig2016.pdf"> ЗДЕСЬ </a>
+    </p>
+    <div>
+    </div>
+    '''
+    st.sidebar.markdown(text, unsafe_allow_html=True)
+
     st.markdown('''<p style="font-size: 80px;
                         background: -webkit-linear-gradient(#FFA500, #FF4500);
                         -webkit-background-clip: text;
@@ -172,11 +204,32 @@ if choice == "О сервисе":
                         font-size:32px">
                         О сервисе
                         </p>''',unsafe_allow_html=True)
-    #st.header("Морской закат")
+    col1,col2= st.columns(2)
+    with col1:
+        st.image = Image.open('SunsetWB.jpg')
+        if st.image is not None:
+            col1.image(st.image,use_column_width=True)
+
+    with col2:
+        st.image = Image.open('Sunset.jpeg')
+        if st.image is not None:
+            col2.image(st.image,use_column_width=True)
+
+    col3,col4 = st.columns(2)
+    with col3:
+        st.image = Image.open('MountWB.jpg')
+        if st.image is not None:
+            col3.image(st.image,use_column_width=True)
+
+    with col4:
+        st.image = Image.open('Mount.jpg')
+        if st.image is not None:
+            col4.image(st.image,use_column_width=True)
+
     #img = Image.open('Sunset.jpeg')
     #st.image(img, caption= 'Sunrise by the mountains')
-
+    st.header ('Описание')
     st.text("Сервис по раскрашиванию черно-белых изображений с помощью ансамбля нейронных сетей")
-    st.text("Вы можете с помощью данного приложения придать цвет своим черно-белым фотографиям")
+    st.text("Вы можете с помощью данного приложения раскрасить свои черно-белые фотографии")
     st.text("Сервис разработан Гусевым Сергеем")
     st.text("МГТУ им. Н.Э. Баумана, 2022")
