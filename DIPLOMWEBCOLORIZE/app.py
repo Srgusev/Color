@@ -10,7 +10,7 @@ colorizer_eccv16 = colorizers.eccv16().eval()
 colorizer_siggraph17 = colorizers.siggraph17().eval()
 import numpy as np
 import matplotlib
-
+import BASA
 
 def process_image(img):
     (tens_l_orig, tens_l_rs) = preprocess_img(img, HW=(256,256))
