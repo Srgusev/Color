@@ -23,8 +23,8 @@ conn = sqlite3.connect('VKR.db')
 # Создание курсора
 cursor = conn.cursor()
 # Проверка на существование и очистка
-#cursor.execute("DROP TABLE IF EXISTS VKR")
-#cursor.execute("DROP TABLE IF EXISTS VKROUT")
+cursor.execute("DROP TABLE IF EXISTS VKR")
+cursor.execute("DROP TABLE IF EXISTS VKROUT")
 
 def init_db(conn: Connection):
     conn.execute(
@@ -279,17 +279,6 @@ def main():
             st.image = Image.open('Mount.jpg')
             if st.image is not None:
                 col4.image(st.image,use_column_width=True)
-
-        col5,col6 = st.columns(2)
-        with col5:
-            st.image = Image.open('MoscowWB.jpg')
-            if st.image is not None:
-                col5.image(st.image,use_column_width=True)
-
-        with col6:
-            st.image = Image.open('Moscow.jpg')
-            if st.image is not None:
-                col6.image(st.image,use_column_width=True)
 
         st.header('Описание')
         st.markdown(
