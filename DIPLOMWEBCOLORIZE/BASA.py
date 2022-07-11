@@ -2,9 +2,6 @@ import sqlite3
 import base64
 import streamlit as st
 from io import BytesIO
-
-from matplotlib import image as mpimg
-
 from colorizers import *
 from PIL import Image
 import torch
@@ -44,7 +41,7 @@ def WB_image_download_link(img):
 
 def COL_image_download_link(out_img):
 	buffered = BytesIO()
-	mpimg.imsave(buffered, out_img)
+	matplotlib.image.imsave(buffered, out_img)
 	img_str = base64.b64encode(buffered.getvalue()).decode()
 	href = f'<a href="data:file/jpg;base64,{img_str}" download ="Цвет.jpg"><button>Скачать цветное изображение</button></a>'
 	return href
